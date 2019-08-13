@@ -1,0 +1,20 @@
+<form>    
+    <bsc-field (response)="reciverFeedback($event)"     [field]="_username"     *ngIf="applyUsername"></bsc-field>
+    
+    <bsc-field (response)="reciverFeedback($event)"     [field]="_firstname"    *ngIf="applyFirstName"></bsc-field>
+    
+    <bsc-field (response)="reciverFeedback($event)"     [field]="_lastname"     *ngIf="applyLastName"></bsc-field>
+    
+    <bsc-field (response)="reciverFeedback($event)"     [field]="_phone"        *ngIf="applyPhone"></bsc-field>
+   
+    <bsc-field (response)="reciverFeedback($event)"     [field]="_email"        *ngIf="applyEmail || applyEmailConfirmation"></bsc-field>   
+
+    <bsc-field (response)="reciverFeedback($event)"     [field]="_emailconf"    *ngIf="applyEmailConfirmation"></bsc-field>
+    
+    <bsc-field (response)="reciverFeedback($event)"     [field]="_password"     *ngIf="applyPassword || applyPasswordConfirmation" ></bsc-field>
+    
+    <bsc-field (response)="reciverFeedback($event)"     [field]="_passwordconf" *ngIf="applyPasswordConfirmation" ></bsc-field>
+    
+    <button type="submit" class="btn btn-primary btn-lg btn-block" id="send" (click)="validateData()">Send</button>
+</form>
+
