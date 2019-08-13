@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { formatNumber } from '@angular/common';
+import { Field } from 'src/app/field/field.model';
+
 @Component({
   selector     :'bsc-form',
   templateUrl  :'./form.component.html',
@@ -16,7 +18,8 @@ export class FormComponent implements OnInit {
   @Input("addpassword")             applyPassword             :boolean = true;
   @Input("addpasswordconfirmation") applyPasswordConfirmation :boolean = false;
 
-  fields:FormType = 
+  fields: Field[];
+  fieldsvalue:FormType = 
   {
     username  :"",
     email     :"",
@@ -29,34 +32,41 @@ export class FormComponent implements OnInit {
   };
 
   
-  // criando fields
-  _username  = { id: "username", type:"text", label:"Username", placeholder:"Username"};
-  _firstname = { id: "firstname", type:"text", label:"First Name", placeholder:"First Name"};
-  _lastname  = { id: "lastname", type:"text", label:"Last Name", placeholder:"Last Name"};
-  _phone     = { id: "phone", type:"text", label:"Phone", placeholder:"(DD)XXXXXXXXX"};
-  _email     = { id: "email", type:"email", label:"Email", placeholder:"Email"};
-  _emailconf = { id: "emailconf", type:"email", label:"Conf. Email", placeholder:"Retype your email"};
-  _password  = { id: "password", type:"password", label:"Password", placeholder:"Password"};
-  _passwconf = { id: "passwconf", type:"password", label:"Conf. Password", placeholder:"Retype your password"};
   
+  constructor()
+  {
+    
+  }
   ngOnInit() {
+    //TEM QUE SER EXECUTADO NO ONINIT, QUANDO OS INPUTS JÁ FORAM COMPUTADOS
+    this.fields  =
+    [
+      {id: "username", type:"text", label:"Username", placeholder:"Username", render:this.applyUsername},
+      {id: "firstname", type:"text", label:"First Name", placeholder:"First Name", render:this.applyFirstName},
+      {id: "lastname", type:"text", label:"Last Name", placeholder:"Last Name", render:this.applyLastName},
+      {id: "phone", type:"text", label:"Phone", placeholder:"(DD)XXXXXXXXX", render:this.applyPhone},
+      {id: "email", type:"email", label:"Email", placeholder:"Email", render:(this.applyEmail||this.applyEmailConfirmation)},
+      {id: "emailconf", type:"email", label:"Conf. Email", placeholder:"Retype your email", render:this.applyEmailConfirmation},
+      {id: "password", type:"password", label:"Password", placeholder:"Password", render:(this.applyPassword||this.applyPasswordConfirmation)},
+      {id: "passwconf", type:"password", label:"Conf. Password", placeholder:"Retype your password", render:this.applyPasswordConfirmation},
+    ];
   }
   reciverFeedback(response) {
     // console.log('Foi emitido o evento', response);
-    this.fields[response.field] = response.value;
+    this.fieldsvalue[response.field] = response.value;
     
   }
   
   validateData()
   {
-    var _data :string[]   =[  this.fields.username,
-                              this.fields.email,
-                              this.fields.emailconf,
-                              this.fields.firstname,
-                              this.fields.lastname,
-                              this.fields.phone,
-                              this.fields.password,
-                              this.fields.passwconf
+    var _data :string[]   =[  this.fieldsvalue.username,
+                              this.fieldsvalue.email,
+                              this.fieldsvalue.emailconf,
+                              this.fieldsvalue.firstname,
+                              this.fieldsvalue.lastname,
+                              this.fieldsvalue.phone,
+                              this.fieldsvalue.password,
+                              this.fieldsvalue.passwconf
                             ];
 
     var _fields :boolean[] =[ this.applyUsername,
@@ -75,10 +85,10 @@ export class FormComponent implements OnInit {
       if(_fields[el] && (_data[el]==="" || _data[el] === null)) console.log(`VALIDAÇÃO FALHOU ${_data[el]}`);
     }
     // vamos verificar se os emails conferem
-    if(this.applyEmailConfirmation && (this.fields.email != this.fields.emailconf)) console.log("EMAIL NÃO CORRESPONDE"); 
+    if(this.applyEmailConfirmation && (this.fieldsvalue.email != this.fieldsvalue.emailconf)) console.log("EMAIL NÃO CORRESPONDE"); 
   
     // vamos verificar se as senhas conferem
-    if(this.applyPasswordConfirmation && (this.fields.password != this.fields.passwconf)) console.log("SENHA NÃO CORRESPONDE"); 
+    if(this.applyPasswordConfirmation && (this.fieldsvalue.password != this.fieldsvalue.passwconf)) console.log("SENHA NÃO CORRESPONDE"); 
   
   }
 }
